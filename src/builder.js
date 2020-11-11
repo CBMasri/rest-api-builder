@@ -49,6 +49,9 @@ export default class APIBuilder {
     if (!path) {
       throw new Error('path is required')
     }
+    if (typeof path !== 'string') {
+      throw new TypeError('path must be a string')
+    }
 
     validateEndpoints(endpoints)
 
