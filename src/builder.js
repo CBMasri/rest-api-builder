@@ -173,7 +173,7 @@ export default class APIBuilder {
    * @returns {Boolean}
    */
   _payloadRequired (endpoint) {
-    const requirePayload = ['post, put', 'patch']
+    const requirePayload = ['post', 'put', 'patch']
     return requirePayload.includes(endpoint.method)
   }
 
