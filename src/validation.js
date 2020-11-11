@@ -43,7 +43,7 @@ export function validateEndpoints (endpoints) {
           The allowed http methods are: ${HTTP_METHODS.join(', ')}
         `)
       }
-      if (!endpoint.path) {
+      if (!endpoint.hasOwnProperty('path')) {
         throw new Error(`endpoint at pos ${index} is missing a path`)
       }
       if (typeof endpoint.path !== 'string') {
