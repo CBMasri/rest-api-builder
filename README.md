@@ -1,4 +1,4 @@
-> :warning: **This repository is under active development**: Please don't use this in production yet.
+:warning: **This repository is under active development**: Please don't use this in production.
 
 # rest-api-builder
 
@@ -44,10 +44,7 @@ export default api
 
 ## Install
 
-```bash
-git clone https://TODO
-cd rest-api-builder
-```
+TODO
 
 ## Usage
 
@@ -107,7 +104,7 @@ Here's a list of the `requestFn` config options.
 
   // any additional properties you'd like to pass to
   // your request library, eg. url parameters
-  ...extra: {
+  ...{
     params: {
       q: 'foo'
     }
@@ -153,14 +150,14 @@ This results in the following schema, where `action` becomes the invocation meth
 
 If the `endpoints` param is omitted, the following defaults will be created for you:
 
-| Action        | HTTP Method | Path     |
-| ------------- | ----------- | -------- |
-| list          | GET         | /foo     |
-| retrieve      | GET         | /foo/:id |
-| create        | POST        | /foo     |
-| update        | PUT         | /foo/:id |
-| partialUpdate | PATCH       | /foo/:id |
-| destroy       | DELETE      | /foo/:id |
+| Action        | HTTP Method | Path       |
+| ------------- | ----------- | ---------- |
+| list          | GET         | `/foo`     |
+| retrieve      | GET         | `/foo/:id` |
+| create        | POST        | `/foo`     |
+| update        | PUT         | `/foo/:id` |
+| partialUpdate | PATCH       | `/foo/:id` |
+| destroy       | DELETE      | `/foo/:id` |
 
 Alternatively, you can create custom endpoints by providing an endpoint schema
 as follows.
@@ -261,10 +258,10 @@ The invocation method signature will be different depending on its usage.
 
 `resource.actionWithId(id[, data, config])`
 
-An id wil be required for `retrieve`, `create`, `update`, `partialUpdate`,
-`destroy`, or if a custom `path` is used which contains at least one named
-segment. If multiple named segments are defined in `path`, this argument
-should be an object whose keys map to each segment.
+An id wil be required for `retrieve`, `update`, `partialUpdate`,
+`destroy`, or if a custom `path` is used which contains at least
+one named segment. If multiple named segments are defined in `path`,
+this argument should be an object whose keys map to each segment.
 
 ```js
 const resource = builder.create({
@@ -321,8 +318,17 @@ TODO
 
 ## Development
 
+To get started, clone the repo:
+
 ```bash
-npm run test   # run tests
+git clone https://github.com/CBMasri/rest-api-builder.git
+cd rest-api-builder
+```
+
+Commands:
+
+```bash
+npm run test  # run tests
 ```
 
 ## Similar libraries
