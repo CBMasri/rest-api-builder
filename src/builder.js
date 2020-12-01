@@ -187,7 +187,7 @@ export default class APIBuilder {
    * @returns {Object}
    */
   _parseArgs (args, method) {
-    const id = args[0]
+    let id = args[0]
     let data
     let extra = args[0] || {}
 
@@ -198,6 +198,7 @@ export default class APIBuilder {
     }
     // A payload will be the first argument for POST
     if (method === 'post') {
+      id = undefined
       data = args[0]
       extra = args[1] || {}
     }
@@ -216,7 +217,7 @@ export default class APIBuilder {
    * @param {String} basePath - base path to resource
    * @param {Object} endpoint - endpoint config
    * @param {String} endpoint.path - route path, will be appended to basePath
-   * @param {(String|Number|Object)} [id] - resource identifier
+   * @param {(String|Number|Object)} [id] - resource identifier(s)
    * @returns {String}
    */
   _buildUrl (basePath, endpoint, id) {
