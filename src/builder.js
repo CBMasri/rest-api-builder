@@ -62,7 +62,7 @@ export default class APIBuilder {
   }
 
   /**
-   * When no endpoints are specified by the user,
+   * When no actions are specified by the user,
    * create the defaults.
    *
    * @param {String} path
@@ -78,7 +78,10 @@ export default class APIBuilder {
   }
 
   /**
-   * Generate an action for each endpoint.
+   * Generate an action using the user-provided
+   * configration object. These can be the default
+   * actions (eg. list, retrieve, update) or custom
+   * actions which define their own path.
    *
    * @param {Object[]} endpoints
    * @param {String} path
@@ -110,6 +113,7 @@ export default class APIBuilder {
    * @param {Object} config - route configration
    * @param {String} config.method - http verb
    * @param {String} config.path - route path
+   * @param {String} [config.action] - action name, only set if custom
    * @returns {Function}
    */
   _requestFn (basePath, config) {
@@ -117,7 +121,7 @@ export default class APIBuilder {
     const payloadRequired = this._payloadRequired(config)
 
     return async (...args) => {
-      const { id, data, extra } = this._parseArgs(args, config.method)
+      const { id, data, extra } = this._parseArgs(args, config)
 
       if (idRequired) {
         if (id === undefined) {
@@ -183,30 +187,39 @@ export default class APIBuilder {
    * will differ based on the http method.
    *
    * @param {Array} args - requestFn arguments
-   * @param {string} method - http method
+   * @param {Object} config - endpoint config
+   * @param {String} config.method - http method
+   * @param {String} config.path - route path
+   * @param {String} [config.action] - action name, only set if custom
    * @returns {Object}
    */
-  _parseArgs (args, method) {
-    let id = args[0]
-    let data
-    let extra = args[0] || {}
+  _parseArgs (args, config) {
+    let id, data, extra
 
     // If `id` is required, `extra` will be either the
     // 2nd or 3rd argument depending on the http method
-    if (id !== undefined) {
-      extra = args[1] || {}
+    if (this._idRequired(config)) {
+      id = args[0]
+      extra = args[1]
+      if (this._payloadRequired(config)) {
+        data = args[1]
+        extra = args[2]
+      }
+    } else {
+      switch (config.method) {
+        case 'get':
+        case 'delete':
+          extra = args[0]
+          break
+        case 'post':
+        case 'put':
+        case 'patch':
+          data = args[0]
+          extra = args[1]
+          break
+      }
     }
-    // A payload will be the first argument for POST
-    if (method === 'post') {
-      id = undefined
-      data = args[0]
-      extra = args[1] || {}
-    }
-    // or the second argument for PUT, PATCH (both require an id)
-    if (method === 'put' || method === 'patch') {
-      data = args[1]
-      extra = args[2] || {}
-    }
+    extra = extra || {}
     return { id, data, extra }
   }
 
