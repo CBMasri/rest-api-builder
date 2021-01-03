@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/CBMasri/rest-api-builder/branch/master/graph/badge.svg?token=52UCO3HQEL)](https://codecov.io/gh/CBMasri/rest-api-builder)
+
 :warning: **This repository is under active development**: Please don't use this in production.
 
 # rest-api-builder
