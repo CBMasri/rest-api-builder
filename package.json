@@ -12,7 +12,8 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:coverage" : "jest --coverage"
   },
   "keywords": [
     "rest",
