@@ -142,94 +142,64 @@ describe('APIBuilder', () => {
   })
 
   describe('_parseArgs', () => {
-    it('get (no id)', () => {
-      const args = [{ extra: 'params' }]
-      const config = { method: 'get', path: '' }
+
+    // Helper function to create config and assert results
+    const checkArgs = (method, useId = false, useData = false) => {
+      const args = []
+      if (useId) {
+        args.push(123)
+      }
+      if (useData) {
+        args.push({ example: 'data' })
+      }
+      args.push({ extra: 'params' })
+
+      const config = { method, path: useId ? ':id' : '' }
       const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(undefined)
-      expect(data).toEqual(undefined)
+
+      expect(id).toEqual(useId ? 123 : undefined)
+      expect(data).toEqual(useData ? { example: 'data' } : undefined)
       expect(extra).toEqual({ extra: 'params' })
+    }
+
+    it('get (no id)', () => {
+      checkArgs('get', false, false)
     })
 
     it('get (with id)', () => {
-      const args = [123, { extra: 'params' }]
-      const config = { method: 'get', path: ':id' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(123)
-      expect(data).toEqual(undefined)
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('get', true, false)
     })
 
     it('post (no id)', () => {
-      const args = [{ example: 'data' }, { extra: 'params' }]
-      const config = { method: 'post', path: '' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(undefined)
-      expect(data).toEqual({ example: 'data' })
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('post', false, true)
     })
 
     it('post (with id)', () => {
-      const args = [123, { example: 'data' }, { extra: 'params' }]
-      const config = { method: 'post', path: ':id' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(123)
-      expect(data).toEqual({ example: 'data' })
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('post', true, true)
     })
 
     it('put (no id)', () => {
-      const args = [{ example: 'data' }, { extra: 'params' }]
-      const config = { method: 'put', path: '' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(undefined)
-      expect(data).toEqual({ example: 'data' })
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('put', false, true)
     })
 
     it('put (with id)', () => {
-      const args = [123, { example: 'data' }, { extra: 'params' }]
-      const config = { method: 'put', path: ':id' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(123)
-      expect(data).toEqual({ example: 'data' })
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('put', true, true)
     })
 
     it('patch (no id)', () => {
-      const args = [{ example: 'data' }, { extra: 'params' }]
-      const config = { method: 'patch', path: '' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(undefined)
-      expect(data).toEqual({ example: 'data' })
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('patch', false, true)
     })
 
     it('patch (with id)', () => {
-      const args = [123, { example: 'data' }, { extra: 'params' }]
-      const config = { method: 'patch', path: ':id' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(123)
-      expect(data).toEqual({ example: 'data' })
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('patch', true, true)
     })
 
     it('delete (no id)', () => {
-      const args = [{ extra: 'params' }]
-      const config = { method: 'delete', path: '' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(undefined)
-      expect(data).toEqual(undefined)
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('delete', false, false)
     })
 
     it('delete (with id)', () => {
-      const args = [123, { extra: 'params' }]
-      const config = { method: 'delete', path: ':id' }
-      const { id, data, extra } = builder._parseArgs(args, config)
-      expect(id).toEqual(123)
-      expect(data).toEqual(undefined)
-      expect(extra).toEqual({ extra: 'params' })
+      checkArgs('delete', true, false)
     })
   })
 
