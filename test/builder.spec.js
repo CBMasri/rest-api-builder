@@ -204,12 +204,67 @@ describe('APIBuilder', () => {
   })
 
   describe('_buildURL', () => {
-    it('id can be a string or number when there is a single resource identifier', async () => {
-
+    it('builds a simple url when no named params are specified', () => {
+      const url = builder._buildUrl('foo', 'bar')
+      expect(url).toEqual('/foo/bar/')
     })
 
-    it('id must be an object when there are multiple resource identifiers', async () => {
+    it('id is ignored if the path does not contain any named params', () => {
+      const url = builder._buildUrl('foo', 'bar', 123)
+      expect(url).toEqual('/foo/bar/')
+    })
 
+    it('id can be a number when there is a single named param', async () => {
+      let url = builder._buildUrl('foo', 'bar/:id', 123)
+      expect(url).toEqual('/foo/bar/123/')
+    })
+
+    it('id can be a string when there is a single named param', async () => {
+      const url = builder._buildUrl('foo', 'bar/:id', '123')
+      expect(url).toEqual('/foo/bar/123/')
+    })
+
+    it('id is required if the path specifies a named param', () => {
+      expect(() => {
+        builder._buildUrl('foo', ':id')
+      }).toThrow('path specifies a named param but no id was given')
+    })
+
+    it('id should not be an object when there is only a single named param', () => {
+      expect(() => {
+        builder._buildUrl('foo', ':id', { invalid: 'id' })
+      }).toThrow('Received non-primitive value for id')
+    })
+
+    it('id must be an object when there are multiple named params', async () => {
+      expect(() => {
+        builder._buildUrl('foo', ':bar/:baz', 123)
+      }).toThrow('Expected object id for path with multiple named params')
+    })
+
+    it('path-to-regexp raises an error when a named param does not have a matching value', () => {
+      expect(() => {
+        builder._buildUrl('foo', ':bar/:baz', { bar: 'bar' })
+      }).toThrow('Expected "baz" to be a string')
+    })
+
+    it('builds a url with multiple named params', () => {
+      const url = builder._buildUrl('foo', ':bar/:baz/:qux', { bar: 'bar', baz: 'baz', qux: 'qux' })
+      expect(url).toEqual('/foo/bar/baz/qux/')
+    })
+
+    it('ids which are not specified in the path are ignored', () => {
+      const url = builder._buildUrl('foo', ':bar/:baz', { ignore: 'me', bar: 'bar', baz: 'baz' })
+      expect(url).toEqual('/foo/bar/baz/')
+    })
+
+    it('prepends the baseURL parameter if set', () => {
+      const builder = new APIBuilder({
+        requestFn: () => {},
+        baseURL: '/https://example.com/'
+      })
+      const url = builder._buildUrl('foo', ':bar', 123)
+      expect(url).toEqual('https://example.com/foo/123/')
     })
   })
 })

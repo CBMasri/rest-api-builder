@@ -139,7 +139,7 @@ export default class APIBuilder {
 
       const requestConfig = {
         method: config.method,
-        url: this._buildUrl(basePath, config, id),
+        url: this._buildUrl(basePath, config.path, id),
         ...extra
       }
       if (data !== undefined) {
@@ -228,21 +228,20 @@ export default class APIBuilder {
    * requests to the server.
    *
    * @param {String} basePath - base path to resource
-   * @param {Object} endpoint - endpoint config
-   * @param {String} endpoint.path - route path, will be appended to basePath
+   * @param {String} path - route path, will be appended to basePath
    * @param {(String|Number|Object)} [id] - resource identifier(s)
    * @returns {String}
    */
-  _buildUrl (basePath, endpoint, id) {
+  _buildUrl (basePath, path, id) {
     let url = cleanURLSegment(basePath)
 
-    if (endpoint.path) {
-      const toPath = compile(endpoint.path, { encode: encodeURIComponent })
+    if (path) {
+      const toPath = compile(path, { encode: encodeURIComponent })
       const idIsObj = typeof id === 'object'
 
       // Collect named url params from path
       const keys = []
-      pathToRegexp(endpoint.path, keys)
+      pathToRegexp(path, keys)
 
       // Fill in those values using the id
       if (keys.length > 0) {
@@ -260,6 +259,8 @@ export default class APIBuilder {
           }
           url += `/${toPath(id)}/`
         }
+      } else {
+        url += `/${toPath()}/`
       }
     }
     return this.baseURL ? `${this.baseURL}/${url}` : `/${url}`
