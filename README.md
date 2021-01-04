@@ -58,7 +58,7 @@ be shared by all routes.
 
 ```js
 import request from 'my-request-library'
-import RestAPIBuilder from 'path/to/library'
+import RestAPIBuilder from 'rest-api-builder'
 
 const config = {
   requestFn: request,
@@ -80,7 +80,7 @@ These are the available config options for the builder. Only `requestFn` is requ
 
 ```js
 import axios from 'axios'
-import RestAPIBuilder from 'path/to/library'
+import RestAPIBuilder from 'rest-api-builder'
 
 const builder = new RestAPIBuilder({
   requestFn: config => {
