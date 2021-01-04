@@ -1,7 +1,5 @@
 [![codecov](https://codecov.io/gh/CBMasri/rest-api-builder/branch/master/graph/badge.svg?token=52UCO3HQEL)](https://codecov.io/gh/CBMasri/rest-api-builder)
 
-:warning: **This repository is under active development**: Please don't use this in production.
-
 # rest-api-builder
 
 Simple, flexible, scalable JavaScript client for communicating with RESTful resources.
@@ -13,7 +11,7 @@ Simple, flexible, scalable JavaScript client for communicating with RESTful reso
 - Request library agnostic
 - Custom route schema definitions
 - Single dependency (path-to-regexp)
-- De/serialization hooks (TODO)
+<!-- - De/serialization hooks (TODO) -->
 
 ## Purpose
 
@@ -46,7 +44,12 @@ export default api
 
 ## Install
 
-TODO
+Install with [npm](https://www.npmjs.com/get-npm) or [yarn](https://classic.yarnpkg.com/en/).
+
+```bash
+npm install rest-api-builder
+yarn add rest-api-builder
+```
 
 ## Usage
 
@@ -315,11 +318,15 @@ resource.custom(5)       // throws MissingPayloadError
 resource.custom(5, {})   // works
 ```
 
-### Serialization
+<!-- ### Serialization
 
-TODO
+TODO -->
 
 ## Development
+
+You'll need [node.js](https://nodejs.org/en/download/) with support for
+ESM which is enabled by default in v13.2.0+ (previous versions can use
+the `--experimental-modules` flag).
 
 To get started, clone the repo:
 
@@ -332,10 +339,12 @@ Commands:
 
 ```bash
 npm run test  # run tests
-npm run test:coverage  # run tests and generate coverage report
+npm run test:coverage  # generate coverage report
+npm run build  # build for production using webpack
 ```
 
 ## Similar libraries
 
+- https://github.com/Flyrell/rest-api-url-builder
 - https://github.com/marmelab/restful.js
 - https://github.com/robsontenorio/vue-api-query
