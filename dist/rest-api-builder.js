@@ -9,26 +9,32 @@
 		root["rest-api-builder"] = factory();
 })(this, function() {
 return /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/builder.js":
 /*!************************!*\
   !*** ./src/builder.js ***!
   \************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => /* binding */ APIBuilder
-/* harmony export */ });
-/* harmony import */ var path_to_regexp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! path-to-regexp */ "./node_modules/path-to-regexp/dist.es2015/index.js");
-/* harmony import */ var _errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./errors.js */ "./src/errors.js");
-/* harmony import */ var _validation_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validation.js */ "./src/validation.js");
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils.js */ "./src/utils.js");
+const {
+  pathToRegexp,
+  compile
+} = __webpack_require__(/*! path-to-regexp */ "./node_modules/path-to-regexp/dist.es2015/index.js");
 
+const {
+  MissingIdError,
+  MissingPayloadError
+} = __webpack_require__(/*! ./errors.js */ "./src/errors.js");
 
+const {
+  validateConfig,
+  validateEndpoints
+} = __webpack_require__(/*! ./validation.js */ "./src/validation.js");
 
+const {
+  cleanURLSegment
+} = __webpack_require__(/*! ./utils.js */ "./src/utils.js");
 
 class APIBuilder {
   /**
@@ -43,8 +49,8 @@ class APIBuilder {
       baseURL = '',
       requestFn = null
     } = config;
-    (0,_validation_js__WEBPACK_IMPORTED_MODULE_1__.validateConfig)(config);
-    this.baseURL = (0,_utils_js__WEBPACK_IMPORTED_MODULE_2__.cleanURLSegment)(baseURL);
+    validateConfig(config);
+    this.baseURL = cleanURLSegment(baseURL);
     this.requestFn = requestFn;
     this.defaultActions = {
       list: {
@@ -97,7 +103,7 @@ class APIBuilder {
       throw new TypeError('path must be a string');
     }
 
-    (0,_validation_js__WEBPACK_IMPORTED_MODULE_1__.validateEndpoints)(endpoints);
+    validateEndpoints(endpoints);
 
     if (!endpoints.length) {
       return this._createDefaultActions(path);
@@ -181,7 +187,7 @@ class APIBuilder {
 
       if (idRequired) {
         if (id === undefined) {
-          throw new _errors_js__WEBPACK_IMPORTED_MODULE_0__.MissingIdError();
+          throw new MissingIdError();
         }
 
         if (!['string', 'number', 'object'].includes(typeof id)) {
@@ -190,7 +196,7 @@ class APIBuilder {
       }
 
       if (payloadRequired && data === undefined) {
-        throw new _errors_js__WEBPACK_IMPORTED_MODULE_0__.MissingPayloadError();
+        throw new MissingPayloadError();
       }
 
       const requestConfig = {
@@ -300,16 +306,16 @@ class APIBuilder {
 
 
   _buildUrl(basePath, path, id) {
-    let url = (0,_utils_js__WEBPACK_IMPORTED_MODULE_2__.cleanURLSegment)(basePath);
+    let url = cleanURLSegment(basePath);
 
     if (path) {
-      const toPath = (0,path_to_regexp__WEBPACK_IMPORTED_MODULE_3__.compile)(path, {
+      const toPath = compile(path, {
         encode: encodeURIComponent
       });
       const idIsObj = typeof id === 'object'; // Collect named url params from path
 
       const keys = [];
-      (0,path_to_regexp__WEBPACK_IMPORTED_MODULE_3__.pathToRegexp)(path, keys); // Fill in those values using the id
+      pathToRegexp(path, keys); // Fill in those values using the id
 
       if (keys.length > 0) {
         if (id === undefined) {
@@ -341,23 +347,23 @@ class APIBuilder {
 
 }
 
+module.exports = APIBuilder;
+
 /***/ }),
 
 /***/ "./src/constants.js":
 /*!**************************!*\
   !*** ./src/constants.js ***!
   \**************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "HTTP_METHODS": () => /* binding */ HTTP_METHODS,
-/* harmony export */   "DEFAULT_ACTIONS": () => /* binding */ DEFAULT_ACTIONS
-/* harmony export */ });
 // Constants
 const HTTP_METHODS = ['head', 'get', 'post', 'put', 'patch', 'delete'];
 const DEFAULT_ACTIONS = ['list', 'retrieve', 'create', 'update', 'partialUpdate', 'destroy'];
-
+module.exports = {
+  HTTP_METHODS,
+  DEFAULT_ACTIONS
+};
 
 /***/ }),
 
@@ -365,14 +371,8 @@ const DEFAULT_ACTIONS = ['list', 'retrieve', 'create', 'update', 'partialUpdate'
 /*!***********************!*\
   !*** ./src/errors.js ***!
   \***********************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ExtendableError": () => /* binding */ ExtendableError,
-/* harmony export */   "MissingIdError": () => /* binding */ MissingIdError,
-/* harmony export */   "MissingPayloadError": () => /* binding */ MissingPayloadError
-/* harmony export */ });
 /* eslint-disable no-proto */
 
 /**
@@ -396,6 +396,7 @@ class ExtendableError extends Error {
   }
 
 }
+
 class MissingIdError extends ExtendableError {
   constructor(message = 'Unable to complete request: missing resource identifier') {
     super(message);
@@ -404,6 +405,7 @@ class MissingIdError extends ExtendableError {
   }
 
 }
+
 class MissingPayloadError extends ExtendableError {
   constructor(message = 'Unable to complete request: payload is required') {
     super(message);
@@ -413,18 +415,19 @@ class MissingPayloadError extends ExtendableError {
 
 }
 
+module.exports = {
+  MissingIdError,
+  MissingPayloadError
+};
+
 /***/ }),
 
 /***/ "./src/utils.js":
 /*!**********************!*\
   !*** ./src/utils.js ***!
   \**********************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "cleanURLSegment": () => /* binding */ cleanURLSegment
-/* harmony export */ });
 /**
  * Trim leading and trailing slashes.
  *
@@ -442,21 +445,22 @@ function cleanURLSegment(segment) {
   return segment;
 }
 
+module.exports = {
+  cleanURLSegment
+};
+
 /***/ }),
 
 /***/ "./src/validation.js":
 /*!***************************!*\
   !*** ./src/validation.js ***!
   \***************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "validateConfig": () => /* binding */ validateConfig,
-/* harmony export */   "validateEndpoints": () => /* binding */ validateEndpoints
-/* harmony export */ });
-/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants.js */ "./src/constants.js");
-
+const {
+  DEFAULT_ACTIONS,
+  HTTP_METHODS
+} = __webpack_require__(/*! ./constants.js */ "./src/constants.js");
 /**
  * Validate the APIBuilder configuration.
  *
@@ -465,6 +469,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param {String} [config.baseURL] - Base URL path that will be prepended to all routes
  * @returns {Boolean}
  */
+
 
 function validateConfig(config) {
   if (!config.hasOwnProperty('requestFn')) {
@@ -486,6 +491,7 @@ function validateConfig(config) {
  * @returns {Boolean}
  */
 
+
 function validateEndpoints(endpoints) {
   for (const [index, endpoint] of endpoints.entries()) {
     // All endpoints need an action
@@ -494,15 +500,15 @@ function validateEndpoints(endpoints) {
     } // Custom endpoints must also define the http method and path
 
 
-    if (!_constants_js__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ACTIONS.includes(endpoint.action)) {
+    if (!DEFAULT_ACTIONS.includes(endpoint.action)) {
       if (!endpoint.method) {
         throw new Error(`endpoint at pos ${index} is missing a method`);
       }
 
-      if (!_constants_js__WEBPACK_IMPORTED_MODULE_0__.HTTP_METHODS.includes(endpoint.method.toLowerCase())) {
+      if (!HTTP_METHODS.includes(endpoint.method.toLowerCase())) {
         throw new Error(`
           endpoint at pos ${index} has an unknown method: ${endpoint.method}\n
-          The allowed http methods are: ${_constants_js__WEBPACK_IMPORTED_MODULE_0__.HTTP_METHODS.join(', ')}
+          The allowed http methods are: ${HTTP_METHODS.join(', ')}
         `);
       }
 
@@ -517,6 +523,11 @@ function validateEndpoints(endpoints) {
   }
 }
 
+module.exports = {
+  validateConfig,
+  validateEndpoints
+};
+
 /***/ }),
 
 /***/ "./node_modules/path-to-regexp/dist.es2015/index.js":
@@ -525,6 +536,7 @@ function validateEndpoints(endpoints) {
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "parse": () => /* binding */ parse,
