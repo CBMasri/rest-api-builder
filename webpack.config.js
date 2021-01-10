@@ -7,7 +7,7 @@ function generateConfig (name) {
     target: 'web',
     mode: compress ? 'production' : 'development',
     entry: {
-      main: path.resolve(__dirname, 'src/builder.js')
+      main: path.resolve(__dirname, 'index.js')
     },
     output: {
       path: path.resolve(__dirname, 'dist'),

@@ -1,8 +1,8 @@
 {
   "name": "rest-api-builder",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple, flexible, scalable JavaScript client for communicating with RESTful resources.",
-  "main": "src/builder.js",
+  "main": "index.js",
   "files": [
     "dist"
   ],
