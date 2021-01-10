@@ -11,16 +11,6 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./index.js":
-/*!******************!*\
-  !*** ./index.js ***!
-  \******************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-module.exports = __webpack_require__(/*! ./src/builder.js */ "./src/builder.js");
-
-/***/ }),
-
 /***/ "./src/builder.js":
 /*!************************!*\
   !*** ./src/builder.js ***!
@@ -1016,7 +1006,7 @@ function pathToRegexp(path, keys, options) {
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__("./index.js");
+/******/ 	return __webpack_require__("./src/builder.js");
 /******/ })()
 ;
 });
