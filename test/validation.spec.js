@@ -1,4 +1,4 @@
-import APIBuilder from '../src/builder'
+const APIBuilder = require('../src/builder')
 
 /* eslint-disable no-new */
 

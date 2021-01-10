@@ -1,10 +1,10 @@
-import { pathToRegexp, compile } from 'path-to-regexp'
+const { pathToRegexp, compile } = require('path-to-regexp')
 
-import { MissingIdError, MissingPayloadError } from './errors.js'
-import { validateConfig, validateEndpoints } from './validation.js'
-import { cleanURLSegment } from './utils.js'
+const { MissingIdError, MissingPayloadError } = require('./errors.js')
+const { validateConfig, validateEndpoints } = require('./validation.js')
+const { cleanURLSegment } = require('./utils.js')
 
-export default class APIBuilder {
+class APIBuilder {
   /**
    * Instantiate the builder.
    *
@@ -266,3 +266,5 @@ export default class APIBuilder {
     return this.baseURL ? `${this.baseURL}/${url}` : `/${url}`
   }
 }
+
+module.exports = APIBuilder

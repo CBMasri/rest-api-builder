@@ -1,5 +1,5 @@
-import APIBuilder from '../src/builder'
-import { MissingIdError, MissingPayloadError } from '../src/errors.js'
+const APIBuilder = require('../src/builder')
+const { MissingIdError, MissingPayloadError } = require('../src/errors.js')
 
 describe('APIBuilder', () => {
   let builder
@@ -142,7 +142,6 @@ describe('APIBuilder', () => {
   })
 
   describe('_parseArgs', () => {
-
     // Helper function to create config and assert results
     const checkArgs = (method, useId = false, useData = false) => {
       const args = []

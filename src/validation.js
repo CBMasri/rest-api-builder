@@ -1,4 +1,4 @@
-import { DEFAULT_ACTIONS, HTTP_METHODS } from './constants.js'
+const { DEFAULT_ACTIONS, HTTP_METHODS } = require('./constants.js')
 
 /**
  * Validate the APIBuilder configuration.
@@ -8,7 +8,7 @@ import { DEFAULT_ACTIONS, HTTP_METHODS } from './constants.js'
  * @param {String} [config.baseURL] - Base URL path that will be prepended to all routes
  * @returns {Boolean}
  */
-export function validateConfig (config) {
+function validateConfig (config) {
   if (!config.hasOwnProperty('requestFn')) {
     throw new Error('requestFn is required')
   }
@@ -26,7 +26,7 @@ export function validateConfig (config) {
  * @param {Object[]} endpoints
  * @returns {Boolean}
  */
-export function validateEndpoints (endpoints) {
+function validateEndpoints (endpoints) {
   for (const [index, endpoint] of endpoints.entries()) {
     // All endpoints need an action
     if (!endpoint.action) {
@@ -53,4 +53,9 @@ export function validateEndpoints (endpoints) {
       }
     }
   }
+}
+
+module.exports = {
+  validateConfig,
+  validateEndpoints
 }

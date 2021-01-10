@@ -3,7 +3,7 @@
  *
  * @param {String} path
  */
-export function cleanURLSegment (segment) {
+function cleanURLSegment (segment) {
   if (segment.startsWith('/')) {
     segment = segment.slice(1)
   }
@@ -11,4 +11,8 @@ export function cleanURLSegment (segment) {
     segment = segment.slice(0, -1)
   }
   return segment
+}
+
+module.exports = {
+  cleanURLSegment
 }

@@ -1,20 +1,7 @@
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-/**
- * Note:
- *
- * .cjs extention must be used for this file in order for
- * webpack-cli to parse it properly. This is necessary because
- * package.json defines the code to be ESM via the `type` param,
- * but webpack-cli doesn't support ESM yet, even though webpack
- * core does.
- *
- * More info:
- * https://github.com/webpack/webpack-cli/issues/1622#issuecomment-677740453
- **/
-
-function generateConfig(name) {
+function generateConfig (name) {
   const compress = name.indexOf('min') > -1
   return {
     target: 'web',

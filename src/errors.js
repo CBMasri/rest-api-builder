@@ -3,7 +3,7 @@
 /**
  * Extendable error class which allows for a custom error name/message.
  */
-export class ExtendableError extends Error {
+class ExtendableError extends Error {
   constructor (message = '') {
     super(message)
 
@@ -18,7 +18,7 @@ export class ExtendableError extends Error {
   }
 }
 
-export class MissingIdError extends ExtendableError {
+class MissingIdError extends ExtendableError {
   constructor (message = 'Unable to complete request: missing resource identifier') {
     super(message)
 
@@ -27,11 +27,16 @@ export class MissingIdError extends ExtendableError {
   }
 }
 
-export class MissingPayloadError extends ExtendableError {
+class MissingPayloadError extends ExtendableError {
   constructor (message = 'Unable to complete request: payload is required') {
     super(message)
 
     this.constructor = MissingPayloadError
     this.__proto__ = MissingPayloadError.prototype
   }
+}
+
+module.exports = {
+  MissingIdError,
+  MissingPayloadError
 }

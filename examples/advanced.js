@@ -1,4 +1,4 @@
-import RestAPIBuilder from '../src/builder.js'
+const RestAPIBuilder = require('../src/builder.js')
 
 const request = config => {
   console.log('requestFn called with the following config:', config)
