@@ -134,7 +134,7 @@ describe('APIBuilder', () => {
           expect.objectContaining({
             method: 'post',
             data: { example: 'data' },
-            url: '/foo'
+            url: '/foo/'
           })
         )
       })
@@ -214,7 +214,7 @@ describe('APIBuilder', () => {
     })
 
     it('id can be a number when there is a single named param', async () => {
-      let url = builder._buildUrl('foo', 'bar/:id', 123)
+      const url = builder._buildUrl('foo', 'bar/:id', 123)
       expect(url).toEqual('/foo/bar/123/')
     })
 
@@ -264,6 +264,16 @@ describe('APIBuilder', () => {
       })
       const url = builder._buildUrl('foo', ':bar', 123)
       expect(url).toEqual('https://example.com/foo/123/')
+    })
+
+    it('does not append a slash if appendSlash is false', () => {
+      const builder = new APIBuilder({
+        requestFn: () => {},
+        baseURL: '/https://example.com/',
+        appendSlash: false
+      })
+      const url = builder._buildUrl('foo', ':bar', 123)
+      expect(url).toEqual('https://example.com/foo/123')
     })
   })
 })

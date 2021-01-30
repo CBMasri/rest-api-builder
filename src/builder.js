@@ -14,14 +14,17 @@ class APIBuilder {
    */
   constructor (config = {}) {
     const {
+      requestFn = null,
       baseURL = '',
-      requestFn = null
+      appendSlash = true
     } = config
 
     validateConfig(config)
 
-    this.baseURL = cleanURLSegment(baseURL)
     this.requestFn = requestFn
+    this.baseURL = cleanURLSegment(baseURL)
+    this.appendSlash = appendSlash
+
     this.defaultActions = {
       list: { method: 'get', path: '' },
       retrieve: { method: 'get', path: ':id' },
@@ -233,7 +236,7 @@ class APIBuilder {
    * @returns {String}
    */
   _buildUrl (basePath, path, id) {
-    let url = cleanURLSegment(basePath)
+    let fullPath = cleanURLSegment(basePath)
 
     if (path) {
       const toPath = compile(path, { encode: encodeURIComponent })
@@ -252,18 +255,19 @@ class APIBuilder {
           if (idIsObj) {
             throw new TypeError('Received non-primitive value for id')
           }
-          url += `/${toPath({ [keys[0].name]: id })}/`
+          fullPath += `/${toPath({ [keys[0].name]: id })}`
         } else {
           if (!idIsObj) {
             throw new Error('Expected object id for path with multiple named params')
           }
-          url += `/${toPath(id)}/`
+          fullPath += `/${toPath(id)}`
         }
       } else {
-        url += `/${toPath()}/`
+        fullPath += `/${toPath()}`
       }
     }
-    return this.baseURL ? `${this.baseURL}/${url}` : `/${url}`
+    const url = this.baseURL ? `${this.baseURL}/${fullPath}` : `/${fullPath}`
+    return this.appendSlash ? `${url}/` : url
   }
 }
 

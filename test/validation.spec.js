@@ -30,6 +30,15 @@ describe('validation', () => {
         })
       }).toThrow('baseURL must be a string')
     })
+
+    it('appendSlash must be a boolean', () => {
+      expect(() => {
+        new APIBuilder({
+          requestFn: () => {},
+          appendSlash: 'true'
+        })
+      }).toThrow('appendSlash must be a boolean')
+    })
   })
 
   describe('create', () => {

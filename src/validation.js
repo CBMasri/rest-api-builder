@@ -18,6 +18,9 @@ function validateConfig (config) {
   if (config.hasOwnProperty('baseURL') && typeof config.baseURL !== 'string') {
     throw new TypeError('baseURL must be a string')
   }
+  if (config.hasOwnProperty('appendSlash') && typeof config.appendSlash !== 'boolean') {
+    throw new TypeError('appendSlash must be a boolean')
+  }
 }
 
 /**
