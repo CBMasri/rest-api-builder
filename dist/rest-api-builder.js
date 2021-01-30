@@ -46,12 +46,14 @@ class APIBuilder {
    */
   constructor(config = {}) {
     const {
+      requestFn = null,
       baseURL = '',
-      requestFn = null
+      appendSlash = true
     } = config;
     validateConfig(config);
-    this.baseURL = cleanURLSegment(baseURL);
     this.requestFn = requestFn;
+    this.baseURL = cleanURLSegment(baseURL);
+    this.appendSlash = appendSlash;
     this.defaultActions = {
       list: {
         method: 'get',
@@ -306,7 +308,7 @@ class APIBuilder {
 
 
   _buildUrl(basePath, path, id) {
-    let url = cleanURLSegment(basePath);
+    let fullPath = cleanURLSegment(basePath);
 
     if (path) {
       const toPath = compile(path, {
@@ -327,22 +329,23 @@ class APIBuilder {
             throw new TypeError('Received non-primitive value for id');
           }
 
-          url += `/${toPath({
+          fullPath += `/${toPath({
             [keys[0].name]: id
-          })}/`;
+          })}`;
         } else {
           if (!idIsObj) {
             throw new Error('Expected object id for path with multiple named params');
           }
 
-          url += `/${toPath(id)}/`;
+          fullPath += `/${toPath(id)}`;
         }
       } else {
-        url += `/${toPath()}/`;
+        fullPath += `/${toPath()}`;
       }
     }
 
-    return this.baseURL ? `${this.baseURL}/${url}` : `/${url}`;
+    const url = this.baseURL ? `${this.baseURL}/${fullPath}` : `/${fullPath}`;
+    return this.appendSlash ? `${url}/` : url;
   }
 
 }
@@ -482,6 +485,10 @@ function validateConfig(config) {
 
   if (config.hasOwnProperty('baseURL') && typeof config.baseURL !== 'string') {
     throw new TypeError('baseURL must be a string');
+  }
+
+  if (config.hasOwnProperty('appendSlash') && typeof config.appendSlash !== 'boolean') {
+    throw new TypeError('appendSlash must be a boolean');
   }
 }
 /**
