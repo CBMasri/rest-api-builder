@@ -1,4 +1,5 @@
-[![codecov](https://codecov.io/gh/CBMasri/rest-api-builder/branch/master/graph/badge.svg?token=52UCO3HQEL)](https://codecov.io/gh/CBMasri/rest-api-builder)
+![npm](https://img.shields.io/npm/v/rest-api-builder)
+![coverage](https://img.shields.io/codecov/c/github/cbmasri/rest-api-builder)
 
 # rest-api-builder
 
@@ -251,9 +252,13 @@ async function listUsers () {
   const response = await UserAPI.users.list()
 }
 
+async function retrieveUser(userId) {
+  const response = await UserAPI.users.retrieve(userId)
+}
+
 async function createUser() {
   const payload = { username: 'Foo', email: 'foo@bar.com' }
-  const response = await UserAPI.users.create(5, payload)
+  const response = await UserAPI.users.create(payload)
 }
 ```
 
@@ -324,9 +329,7 @@ TODO -->
 
 ## Development
 
-You'll need [node.js](https://nodejs.org/en/download/) with support for
-ESM which is enabled by default in v13.2.0+ (previous versions can use
-the `--experimental-modules` flag).
+You'll need [node.js](https://nodejs.org/en/download/) installed.
 
 To get started, clone the repo:
 
