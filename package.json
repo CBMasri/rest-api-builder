@@ -2,7 +2,9 @@
   "name": "rest-api-builder",
   "version": "1.0.5",
   "description": "Simple, flexible, scalable JavaScript client for communicating with RESTful resources.",
-  "main": "./dist/rest-api-builder.js",
+  "repository": "https://github.com/CBMasri/rest-api-builder",
+  "homepage": "https://github.com/CBMasri/rest-api-builder",
+  "main": "./dist/rest-api-builder.min.js",
   "files": [
     "dist"
   ],
@@ -17,7 +19,9 @@
   },
   "keywords": [
     "rest",
-    "api"
+    "api",
+    "rest url",
+    "url builder"
   ],
   "author": "Carl Masri",
   "license": "MIT",
