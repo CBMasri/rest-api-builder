@@ -1,6 +1,6 @@
 {
   "name": "rest-api-builder",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Simple, flexible, scalable JavaScript client for communicating with RESTful resources.",
   "repository": "https://github.com/CBMasri/rest-api-builder",
   "homepage": "https://github.com/CBMasri/rest-api-builder",
